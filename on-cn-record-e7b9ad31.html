@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>世界杯 · 赛事指南</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5f8fa;
+            color: #1a2b3c;
+            line-height: 1.6;
+            padding: 0 1rem;
+        }
+
+        .page {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem 0 3rem;
+        }
+
+        /* 英雄区 —— 杂志封面感 */
+        .hero {
+            position: relative;
+            background: linear-gradient(145deg, #0f2b38 0%, #1d4e5f 100%);
+            border-radius: 2.5rem 2.5rem 2rem 2rem;
+            padding: 3rem 2rem 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 12px 24px -8px rgba(13, 60, 72, 0.25);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(72, 198, 189, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: #dff3f0;
+            margin-bottom: 0.4rem;
+            line-height: 1.2;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 small {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #9cd4d0;
+            display: block;
+            margin-top: 0.25rem;
+            letter-spacing: 0.3px;
+        }
+
+        .hero .byline {
+            margin-top: 1.2rem;
+            font-size: 1rem;
+            color: #c8e6e2;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(2px);
+            display: inline-block;
+            padding: 0.3rem 1.2rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero .byline span {
+            font-weight: 500;
+        }
+
+        /* 卡片网格 —— 蓝绿色点缀 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin: 2.2rem 0;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 1.8rem;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 4px 14px rgba(0, 30, 40, 0.04);
+            border: 1px solid #e5edf0;
+            transition: box-shadow 0.2s, transform 0.15s;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 24px -8px rgba(22, 100, 110, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .card h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #115566;
+            border-left: 4px solid #3ab4a7;
+            padding-left: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            font-size: 0.98rem;
+            color: #2b4450;
+            margin-bottom: 0.9rem;
+        }
+
+        .card .tag {
+            display: inline-block;
+            background: #e2f3f2;
+            color: #1c6d6b;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+        }
+
+        /* 段落卡片 —— 背景说明块 */
+        .context-block {
+            background: #edf5f7;
+            border-radius: 2rem;
+            padding: 2rem 2rem 1.8rem;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .context-block::after {
+            content: '⚽';
+            position: absolute;
+            bottom: 1rem;
+            right: 1.5rem;
+            font-size: 2.2rem;
+            opacity: 0.08;
+        }
+
+        .context-block h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #05404d;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .context-block p {
+            margin-bottom: 1rem;
+            color: #1d3a44;
+        }
+
+        /* 特色列表 */
+        .feature-list {
+            list-style: none;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0 0.5rem 1.8rem;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%233ab4a7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat;
+            background-size: 1rem;
+        }
+
+        .feature-list li strong {
+            color: #0e5b5b;
+        }
+
+        /* 页尾访问提示 */
+        .footer-note {
+            margin-top: 3.2rem;
+            padding: 1.6rem 2rem;
+            background: #ffffffd9;
+            backdrop-filter: blur(4px);
+            border-radius: 60px 20px 20px 60px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            border: 1px solid #d2e5e9;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-note p {
+            font-size: 1rem;
+            color: #1c4855;
+            margin: 0;
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .footer-note a {
+            display: inline-block;
+            background: #1d6d70;
+            color: white;
+            padding: 0.6rem 2rem;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 2px 6px rgba(26, 110, 105, 0.2);
+            letter-spacing: 0.5px;
+            margin-top: 0.5rem;
+            margin-left: 0.8rem;
+        }
+
+        .footer-note a:hover {
+            background: #115558;
+            transform: scale(1.02);
+        }
+
+        .footer-note a:active {
+            transform: scale(0.96);
+        }
+
+        .faq-mini {
+            margin-top: 2.2rem;
+            background: #f7fbfc;
+            border-radius: 2rem;
+            padding: 1.8rem 2rem;
+            border: 1px solid #cde1e5;
+        }
+
+        .faq-mini details {
+            margin-bottom: 0.8rem;
+        }
+
+        .faq-mini summary {
+            font-weight: 600;
+            color: #125561;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .faq-mini details p {
+            margin: 0.5rem 0 1rem 1.2rem;
+            color: #1a404c;
+            font-size: 0.95rem;
+            border-left: 2px solid #98cbc8;
+            padding-left: 1rem;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #d3e2e6;
+            margin: 2.2rem 0 1rem;
+        }
+
+        .small-note {
+            font-size: 0.8rem;
+            color: #54727d;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        /* 移动端友好 */
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero {
+                padding: 2rem 1.2rem;
+            }
+            .card {
+                padding: 1.6rem 1.2rem;
+            }
+            .footer-note {
+                flex-direction: column;
+                align-items: stretch;
+                border-radius: 24px;
+                padding: 1.4rem;
+            }
+            .footer-note a {
+                margin-left: 0;
+                text-align: center;
+                margin-top: 1rem;
+            }
+            .context-block {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- hero 杂志式标题 -->
+        <div class="hero">
+            <h1>世界杯<br><small>赛事信息 · 场景与识别</small></h1>
+            <div class="byline"><span>⚡ 快速定位</span>  ·  专题导航</div>
+        </div>
+
+        <!-- 背景说明 + 网站用途：从用户角度 -->
+        <div class="context-block">
+            <h3>🏟️ 这个页面在讲什么</h3>
+            <p>每天都有大量访问者来到 <strong>on-cn-sjb.com</strong>，他们往往带着同一个疑问：<em>“这里到底提供什么？和世界杯有什么关系？”</em> 以下三段内容，正是从用户识别用途的角度梳理——帮助你快速判断这个网站是否和你当前的需求匹配。</p>
+            <p>我们不预设结论，只呈现事实：一个围绕<a href="https://on-cn-sjb.com" style="color: #126f6f; text-decoration: underline; font-weight: 500;">世界杯</a>核心信息展开的站点，聚合了赛事动态、观赛参考与基础数据。你可以把它理解为一个轻量的信息锚点，而非官方机构。</p>
+        </div>
+
+        <!-- 网格卡片：三段自然介绍 -->
+        <div class="grid">
+            <div class="card">
+                <h2>📋 赛事轮廓</h2>
+                <p>网站内容首先覆盖最近一届世界杯的基础事实：举办时间、主办城市、参赛队伍与分组框架。不追求实时滚动，而是提供可翻阅的静态概览，方便你快速建立赛事空间感。</p>
+                <span class="tag">背景框架</span>
+            </div>
+            <div class="card">
+                <h2>🔍 查询场景</h2>
+                <p>如果你偶尔听到某个球队晋级、某位球员表现亮眼，却不确定具体背景——这个网站可以作为补充参考。它归纳了常见问题（比如赛制、历史记录），省去你在多个页面之间跳转的麻烦。</p>
+                <span class="tag">快速检索</span>
+            </div>
+            <div class="card">
+                <h2>🌐 界面与语言</h2>
+                <p>站点以中文为主，兼顾简洁的视觉层级。无论你用手机还是电脑，信息卡片都能保持可读性。没有广告弹窗或复杂交互，你只需要滑动和阅读——就像翻一本薄薄的赛事手册。</p>
+                <span class="tag">移动友好</span>
+            </div>
+        </div>
+
+        <!-- 特点/场景 混合卡片（额外差异化） -->
+        <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 0.8rem 0 1.5rem;">
+            <div style="flex: 1 1 200px; background: #e6f1f3; border-radius: 1.6rem; padding: 1.5rem;">
+                <h4 style="color: #0b5d5d; margin-bottom: 0.8rem; font-size: 1rem;">⚽ 适合这样的你</h4>
+                <ul class="feature-list" style="margin-top: 0;">
+                    <li>想确认世界杯赛程但不想下载 app</li>
+                    <li>需要向朋友简单解释本届赛事结构</li>
+                    <li>偶尔回顾经典比赛或历史冠军</li>
+                </ul>
+            </div>
+            <div style="flex: 1 1 200px; background: #eaf5f2; border-radius: 1.6rem; padding: 1.5rem;">
+                <h4 style="color: #0b5d5d; margin-bottom: 0.8rem; font-size: 1rem;">🧭 不是这类网站</h4>
+                <ul class="feature-list" style="margin-top: 0;">
+                    <li>❌ 不提供实时比分直播</li>
+                    <li>❌ 不售卖任何票务或周边</li>
+                    <li>❌ 不包含用户评论或论坛</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- FAQ 摘要 —— 杂志常见模块 -->
+        <div class="faq-mini">
+            <h3 style="color: #044652; margin-bottom: 1rem; font-weight: 600; font-size: 1.1rem;">📌 你可能想确认</h3>
+            <details>
+                <summary>页面上的信息来自哪里？</summary>
+                <p>内容整理自公开的赛事资料与官方数据发布，网站本身不生产独家新闻。你可以把它当作一个结构化的信息汇编，具体细节建议交叉核对。</p>
+            </details>
+            <details>
+                <summary>为什么网站名称里包含“世界杯”？</summary>
+                <p>因为站点核心主题围绕<a href="https://on-cn-sjb.com" style="color: #126f6f; text-decoration: underline;">世界杯</a>展开，采用这个关键词是为了让有明确需求的访问者能更快识别用途。简洁直接，不绕弯子。</p>
+            </details>
+            <details>
+                <summary>移动端浏览体验如何？</summary>
+                <p>完全适配。所有卡片、列表、按钮都根据屏幕宽度自动调整，你甚至可以在非常窄的窗口里顺畅阅读。我们测试了多个尺寸，没有横向滚动或重叠问题。</p>
+            </details>
+        </div>
+
+        <!-- 页尾访问提示 -->
+        <div class="footer-note">
+            <p><span style="font-weight: 600; color: #053d44;">👋 想进一步了解？</span> 你可以直接前往本站核心页面，查看关于 <a href="https://on-cn-sjb.com" style="color: #0a6b6b; text-decoration: underline; background: transparent; padding: 0; box-shadow: none; display: inline; font-size: inherit; font-weight: 600;">世界杯</a> 的完整信息集合。</p>
+            <a href="https://on-cn-sjb.com">世界杯</a>
+        </div>
+
+        <!-- 安静的分隔与脚注 -->
+        <hr>
+        <div class="small-note">
+            ⚡ 杂志式介绍 · 非官方页面 · 内容仅供参考
+        </div>
+    </div>
+</body>
+</html>
